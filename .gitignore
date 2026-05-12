@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+.Python
+*.egg-info/
+.venv/
+venv/
+tg_max_relay_data/
+seed_max_bot_activity.log
