@@ -8,7 +8,6 @@ CONTAINER_NAME="${CONTAINER_NAME:-tgmaxrelay}"
 SERVICE_NAME="${SERVICE_NAME:-tgmaxrelay}"
 IMAGE_NAME="${IMAGE_NAME:-tgmaxrelay}"
 NETWORK_NAME="${NETWORK_NAME:-my_projects_my_network}"
-DATA_DIR="${DATA_DIR:-$ROOT_DIR/tg_max_relay_data}"
 DNS_1="${DNS_1:-1.1.1.1}"
 DNS_2="${DNS_2:-8.8.8.8}"
 TELEGRAM_API_HOST_IP="${TELEGRAM_API_HOST_IP:-149.154.167.220}"
@@ -21,8 +20,6 @@ if [[ ! -f ".env" ]]; then
   echo "[deploy] .env not found in $ROOT_DIR" >&2
   exit 1
 fi
-
-mkdir -p "$DATA_DIR"
 
 USE_COMPOSE=0
 if [[ "$FORCE_DOCKER_RUN" != "1" ]] && [[ -f "$COMPOSE_FILE" ]] \
@@ -40,8 +37,6 @@ else
   echo "[deploy] image: $IMAGE_NAME"
   echo "[deploy] network: $NETWORK_NAME"
 fi
-echo "[deploy] data dir: $DATA_DIR"
-
 if [[ "$SKIP_PULL" != "1" ]]; then
   echo "[deploy] git pull ($ROOT_DIR)"
   git pull --ff-only
@@ -72,7 +67,6 @@ else
     --network "$NETWORK_NAME" \
     --add-host "host.docker.internal:host-gateway" \
     --env-file .env \
-    -v "$DATA_DIR:/app/data" \
     --dns "$DNS_1" \
     --dns "$DNS_2" \
     --add-host "api.telegram.org:$TELEGRAM_API_HOST_IP" \
